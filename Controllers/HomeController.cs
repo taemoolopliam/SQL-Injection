@@ -33,8 +33,6 @@ namespace SQL_Injection.Controllers
 
             //Good
             SqlCommand command = new SqlCommand("SELECT TOP(10) * FROM DimEmployee WHERE FirstName=@firstName", conn);
-
-
             command.Parameters.Add("@firstName",SqlDbType.VarChar);
             command.Parameters["@firstName"].Value = firstName;
 
