@@ -21,14 +21,23 @@ namespace SQL_Injection.Controllers
         }
         // GET: api/<HomeController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(string firstName)
         {
             DataTable dt = new DataTable();
             SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             conn.Open();
-            SqlCommand command = new SqlCommand("SELECT TOP(10) * FROM DimEmployee", conn);
+            // Ex -> firstName = 'Guy ;DELETE FROM DimEmployee'
 
-            //command.Parameters.AddWithValue("@zip", "india");
+            //Bad
+            //SqlCommand command = new SqlCommand($"SELECT TOP(10) * FROM DimEmployee WHERE FirstName='{firstName}'", conn);
+
+            //Good
+            SqlCommand command = new SqlCommand("SELECT TOP(10) * FROM DimEmployee WHERE FirstName=@firstName", conn);
+
+
+            command.Parameters.Add("@firstName",SqlDbType.VarChar);
+            command.Parameters["@firstName"].Value = firstName;
+
             using (SqlDataReader reader = command.ExecuteReader())
             {
                 dt.Load(reader);
