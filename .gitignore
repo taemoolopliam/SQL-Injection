@@ -5,6 +5,7 @@
 /bin
 /obj
 /.pnp
+/.vs
 .pnp.js
 
 # testing
